@@ -11,7 +11,7 @@
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">论坛社区</a>
+    <a class="navbar-brand font-weight-bold" href="#">论坛社区</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -24,13 +24,14 @@
         </form>
         <ul class="navbar-nav ml-auto mr-2">
             <li class="nav-item">
-                <a class="nav-link" href="#">登录</a>
+                <a th:if="${session.user==null}" class="nav-link" href="https://github.com/login/oauth/authorize?client_id=af839bc3aece69b5af99&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    我
+                <a  th:if="${session.user!=null}" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <strong >[[${session.user.login}]]</strong>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">消息</a>
                     <a class="dropdown-item" href="#">个人信息</a>
                     <a class="dropdown-item" href="#">登出</a>
                 </div>
