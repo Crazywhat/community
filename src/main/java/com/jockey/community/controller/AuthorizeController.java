@@ -2,23 +2,29 @@ package com.jockey.community.controller;
 
 import com.jockey.community.dto.AccessTokenDTO;
 import com.jockey.community.dto.GithubUser;
+import com.jockey.community.model.User;
 import com.jockey.community.provider.GithubProvider;
+import com.jockey.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
+import java.util.UUID;
 
 
 @Controller
 public class AuthorizeController {
 
     @Autowired
-    GithubProvider githubProvider;
+    private GithubProvider githubProvider;
 
     @Autowired
-    AccessTokenDTO accessTokenDTO;
+    private AccessTokenDTO accessTokenDTO;
+
+    @Autowired
+    private UserService userService;
 
 
     @GetMapping("/callback")
@@ -31,12 +37,21 @@ public class AuthorizeController {
         accessTokenDTO.setState(state);
 
         String tokenString = githubProvider.getAccessToken(accessTokenDTO);
-        System.out.println(tokenString);
 
-        GithubUser user = githubProvider.getGithubUser(tokenString);
+        GithubUser githubUser = githubProvider.getGithubUser(tokenString);
 
-        if(user != null){
-            request.getSession().setAttribute("user", user);
+        if(githubUser != null){
+            request.getSession().setAttribute("user", githubUser);
+
+            User user = new User();
+            user.setAccountId(githubUser.getId().toString());
+            user.setName(githubUser.getLogin());
+            user.setToken(UUID.randomUUID().toString());
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModified(user.getGmtCreate());
+
+            userService.addUser(user);
+            System.out.println(user);
         }
 
         return "redirect:/";
