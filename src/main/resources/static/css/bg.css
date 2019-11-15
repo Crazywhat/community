@@ -1,0 +1,12 @@
+.bg{
+    background: url("../bg.jpg") center fixed;
+    background-size: contain;
+}
+
+.nav-bg{
+    background: #3C4245;
+}
+
+.container-bg{
+    background: #5F6769;
+}
