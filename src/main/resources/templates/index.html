@@ -28,7 +28,7 @@
             </li>
             <li class="nav-item dropdown">
                 <a  th:if="${session.user!=null}" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <strong >[[${session.user.login}]]</strong>
+                    <strong >[[${session.user.name}]]</strong>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="#">消息</a>

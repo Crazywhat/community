@@ -1,6 +1,0 @@
-# Auto Configure
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.jockey.community.config.H2DataSourceConfig,\
-com.jockey.community.config.MysqlDataSourceConfig,\
-com.jockey.community.config.MybatisMysqlDatasourceConfig,\
-com.jockey.community.config.MybatisH2DatasourceConfig

@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.websocket.server.PathParam;
 import java.util.UUID;
 
@@ -30,7 +32,7 @@ public class AuthorizeController {
     @GetMapping("/callback")
     public String callback(@PathParam("code")String code,
                            @PathParam("state")String state,
-                           HttpServletRequest request
+                           HttpServletResponse response
                            ){
 
         accessTokenDTO.setCode(code);
@@ -41,14 +43,18 @@ public class AuthorizeController {
         GithubUser githubUser = githubProvider.getGithubUser(tokenString);
 
         if(githubUser != null){
-            request.getSession().setAttribute("user", githubUser);
+
+            String token = UUID.randomUUID().toString();
 
             User user = new User();
             user.setAccountId(githubUser.getId().toString());
             user.setName(githubUser.getLogin());
-            user.setToken(UUID.randomUUID().toString());
+            user.setToken(token);
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
+            user.setBio(user.getBio());
+
+            response.addCookie(new Cookie("token",token));
 
             userService.addUser(user);
             System.out.println(user);
