@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.*;
 public interface UserMapper {
 
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    @Insert("INSERT INTO user (id,account_id,name,token,gmt_create,gmt_modified,bio) VALUES(#{id},#{accountId},#{name},#{token},#{gmtCreate},#{gmtModified},#{bio})")
+    @Insert("INSERT INTO user (id,account_id,name,token,gmt_create,gmt_modified,bio,avatar_url) VALUES(#{id},#{accountId},#{name},#{token},#{gmtCreate},#{gmtModified},#{bio},#{avatarUrl})")
     void insertUser(User user);
 
     @Select("SELECT * FROM PUBLIC.user WHERE token=#{token}")

@@ -12,35 +12,10 @@
 </head>
 <body class="bg">
 
-<nav class="navbar navbar-expand-lg navbar-dark nav-bg fixed-top">
-    <a class="navbar-brand font-weight-bold" href="#">论坛社区</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<!--插入公共片段topbar-->
+<div th:replace="commons/nav::topbar "></div>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-        <form class="form-inline my-2 ml-2">
-            <input class="form-control mr-sm-2" type="search" placeholder="搜索问题" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
-        </form>
-        <ul class="navbar-nav ml-auto mr-2">
-            <li class="nav-item">
-                <a th:if="${session.user==null}" class="nav-link" href="https://github.com/login/oauth/authorize?client_id=af839bc3aece69b5af99&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a  th:if="${session.user!=null}" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <strong >[[${session.user.name}]]</strong>
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">消息</a>
-                    <a class="dropdown-item" href="#">个人信息</a>
-                    <a class="dropdown-item" href="#">登出</a>
-                </div>
-            </li>
-        </ul>
-    </div>
-</nav>
 
 
 </body>

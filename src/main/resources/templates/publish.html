@@ -9,37 +9,10 @@
     <link rel="stylesheet" th:href="@{/css/bg.css}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 </head>
-<body class="bg">
+<body class="bg">t
 
-<nav class="navbar navbar-expand-lg navbar-dark nav-bg fixed-top">
-    <a class="navbar-brand font-weight-bold" href="#">论坛社区</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-        <form class="form-inline my-2 ml-2">
-            <input class="form-control mr-sm-2" type="search" placeholder="搜索问题" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
-        </form>
-        <ul class="navbar-nav ml-auto mr-2">
-            <li class="nav-item">
-                <a th:if="${session.user==null}" class="nav-link" href="https://github.com/login/oauth/authorize?client_id=af839bc3aece69b5af99&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a  th:if="${session.user!=null}" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <strong >[[${session.user.name}]]</strong>
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">消息</a>
-                    <a class="dropdown-item" href="#">个人信息</a>
-                    <a class="dropdown-item" href="#">登出</a>
-                </div>
-            </li>
-        </ul>
-    </div>
-</nav>
+<!--插入公共片段topbar-->
+<div th:replace="commons/nav::topbar "></div>
 
 <div class="container" style="margin-top: 100px">
     <div class="row">
@@ -51,18 +24,18 @@
             <div class="row">
                 <div class="col"><hr></div>
             </div>
-            <form class="text-white-50">
+            <form th:action="@{/publish}" th:method="post" class="text-white-50">
                 <div class="form-group text-white-50">
                     <label for="title"><strong >问题标题（简单扼要）：</strong></label>
-                    <input type="text" class="form-control" id="title" name="title" placeholder="问题标题...">
+                    <input th:value="${title!=null}?${title}" type="text" class="form-control" id="title" name="title" placeholder="问题标题...">
                 </div>
                 <div class="form-group">
-                    <label for="content"><strong>问题补充（必填）：</strong></label>
-                    <textarea class="form-control" id="content" rows="8" name="content" placeholder=""></textarea>
+                    <label for="description"><strong>问题补充（必填）：</strong></label>
+                    <textarea th:text="${description!=null}?${description}" class="form-control" id="description" rows="8" name="description" placeholder=""></textarea>
                 </div>
                 <div class="form-group text-white-50">
                     <label for="tag"><strong >添加标签：</strong></label>
-                    <input type="text" class="form-control" id="tag" name="tittagle" placeholder="输入标签，以逗号分隔">
+                    <input th:value="${tag!=null}?${tag}" type="text" class="form-control" id="tag" name="tag" placeholder="输入标签，以逗号分隔">
                 </div>
                 <button type="submit" class="btn btn-success float-right" style="margin-right: 30px">发布</button>
             </form>
@@ -87,5 +60,9 @@
 <script src="#" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
 <script src="#" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.bundle.js}"></script>
 <script src="#" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.js}"></script>
-
+<script>
+    $(function() {
+        $('#myModal').modal('show')
+    });
+</script>
 </html>

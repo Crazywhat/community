@@ -23,13 +23,16 @@ public class IndexController {
     public String index(HttpServletRequest request){
 
         Cookie[] cookies = request.getCookies();
-        for ( Cookie cookie : cookies) {
-            if (cookie.getName().equals("token")){
-                String token = cookie.getValue();
-                User user = userService.getUserByToken(token);
-                if(user != null)
-                    request.getSession().setAttribute("user",user);
-                break;
+        if(cookies != null && cookies.length > 0)
+        {
+            for ( Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")){
+                    String token = cookie.getValue();
+                    User user = userService.getUserByToken(token);
+                    if(user != null)
+                        request.getSession().setAttribute("user",user);
+                    break;
+                }
             }
         }
         return "index";
