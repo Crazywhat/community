@@ -28,8 +28,8 @@ public class QuestionService {
     }
 
 
-    public List<QuestionDTO> list() {
-        List<Question> questions = questionMapper.selectAllQuestion();
+    public List<QuestionDTO> list(Integer page, Integer size) {
+        List<Question> questions = questionMapper.selectRangeQuestion((page-1)*size,size);
         List<QuestionDTO> questionDTOS = new ArrayList<>();
 
         for (Question question: questions) {
@@ -41,5 +41,9 @@ public class QuestionService {
         }
 
         return questionDTOS;
+    }
+
+    public Integer getSize(){
+        return questionMapper.getQuestionsCount();
     }
 }

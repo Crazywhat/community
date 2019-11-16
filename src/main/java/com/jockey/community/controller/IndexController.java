@@ -1,6 +1,7 @@
 package com.jockey.community.controller;
 
 
+import com.jockey.community.dto.PaginationDTO;
 import com.jockey.community.dto.QuestionDTO;
 import com.jockey.community.model.User;
 import com.jockey.community.service.QuestionService;
@@ -10,9 +11,12 @@ import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 
@@ -28,7 +32,9 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(HttpServletRequest request
-                        , Model model){
+                        , Model model
+                        ,@RequestParam(value = "page",defaultValue = "1") Integer page
+                        ,@RequestParam(value = "size",defaultValue = "5") Integer size){
 
         Cookie[] cookies = request.getCookies();
         if(cookies != null && cookies.length > 0)
@@ -44,9 +50,15 @@ public class IndexController {
             }
         }
 
-        List<QuestionDTO> questionDTOs = questionService.list();
-        model.addAttribute("questions", questionDTOs);
+        if (page < 1) page = 1;
+        if (size < 1) size = 1;
+        Integer totalSize = questionService.getSize();
+        Integer totalPages = (totalSize + size - 1)/size;
+        if(page > totalPages) page = totalPages;
 
+        List<QuestionDTO> questionDTOs = questionService.list(page,size);
+        PaginationDTO paginationDTO = new PaginationDTO(questionDTOs, page, totalPages);
+        model.addAttribute("pagination", paginationDTO);
 
         return "index";
     }

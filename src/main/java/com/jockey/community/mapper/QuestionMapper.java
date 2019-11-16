@@ -1,10 +1,8 @@
 package com.jockey.community.mapper;
 
 import com.jockey.community.model.Question;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -20,6 +18,11 @@ public interface QuestionMapper {
     @Select("SELECT * FROM question")
     List<Question> selectAllQuestion();
 
+    @Select("SELECT * FROM question LIMIT #{offset},#{size}")
+    List<Question> selectRangeQuestion(@Param("offset") Integer offset,@Param("size") Integer size);
 
+
+    @Select("SELECT COUNT(1) FROM question")
+    Integer getQuestionsCount();
 
 }
