@@ -10,6 +10,9 @@ public interface UserMapper {
     @Insert("INSERT INTO user (id,account_id,name,token,gmt_create,gmt_modified,bio,avatar_url) VALUES(#{id},#{accountId},#{name},#{token},#{gmtCreate},#{gmtModified},#{bio},#{avatarUrl})")
     void insertUser(User user);
 
-    @Select("SELECT * FROM PUBLIC.user WHERE token=#{token}")
+    @Select("SELECT * FROM user WHERE token=#{token}")
     User selectUserByToken(@Param("token") String token);
+
+    @Select("SELECT * FROM user WHERE id=#{id}")
+    User selectUserById(@Param("id") int id);
 }
