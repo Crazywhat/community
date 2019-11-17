@@ -25,4 +25,9 @@ public interface QuestionMapper {
     @Select("SELECT COUNT(1) FROM question")
     Integer getQuestionsCount();
 
+    @Select("SELECT COUNT(1) FROM question WHERE creator=#{creator}")
+    Integer getQuestionsCountByCreator(@Param("creator")Integer creator);
+
+    @Select("SELECT * FROM question WHERE creator=#{creator} LIMIT #{offset},#{size}")
+    List<Question> selectCreatorRangeQuestion(@Param("creator")Integer creator, @Param("offset") Integer offset,@Param("size") Integer size);
 }

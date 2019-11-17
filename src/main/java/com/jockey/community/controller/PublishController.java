@@ -40,20 +40,7 @@ public class PublishController {
         model.addAttribute("tag",question.getTag());
 
         //获取用户登录信息
-        User user = null;
-        Cookie[] cookies = request.getCookies();
-        if(cookies != null && cookies.length > 0)
-        {
-            for ( Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")){
-                    String token = cookie.getValue();
-                    user = userService.getUserByToken(token);
-                    if(user != null)
-                        request.getSession().setAttribute("user",user);
-                    break;
-                }
-            }
-        }
+        User user = (User) request.getSession().getAttribute("user");
         if (user==null){
             model.addAttribute("msg","请先登录");
             return "publish";

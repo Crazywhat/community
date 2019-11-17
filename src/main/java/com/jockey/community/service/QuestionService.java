@@ -28,6 +28,22 @@ public class QuestionService {
     }
 
 
+    public List<QuestionDTO> listByCreator(Integer creator,Integer page, Integer size){
+        List<Question> questions = questionMapper.selectCreatorRangeQuestion(creator,(page-1)*size,size);
+        List<QuestionDTO> questionDTOS = new ArrayList<>();
+
+        for (Question question: questions) {
+            User user = userMapper.selectUserById(question.getCreator());
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(question,questionDTO);
+            questionDTO.setUser(user);
+            questionDTOS.add(questionDTO);
+        }
+
+        return questionDTOS;
+    }
+
+
     public List<QuestionDTO> list(Integer page, Integer size) {
         List<Question> questions = questionMapper.selectRangeQuestion((page-1)*size,size);
         List<QuestionDTO> questionDTOS = new ArrayList<>();
@@ -43,6 +59,7 @@ public class QuestionService {
         return questionDTOS;
     }
 
+    public Integer getSizeByCreator(Integer creator){ return  questionMapper.getQuestionsCountByCreator(creator);}
     public Integer getSize(){
         return questionMapper.getQuestionsCount();
     }

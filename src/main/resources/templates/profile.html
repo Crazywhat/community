@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>论坛社区</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.css}" href="#">
+    <link rel="stylesheet" th:href="@{/css/community.css}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
+</head>
+<body class="bg">
+
+<!--插入公共片段topbar-->
+<div th:replace="commons/nav::topbar "></div>
+
+
+<div class="container" style="margin-top: 100px">
+    <div class="row">
+        <div class="col-md-9 col-sm-12 container-bg" style="padding-top: 10px; padding-bottom: 10px">
+            <h3 class="text-white">
+                <i class='far fa-grin-tongue' style='font-size:24px'></i>
+                <strong>[[${sectionName}]]</strong>
+            </h3>
+            <div class="row">
+                <div class="col"><hr></div>
+            </div>
+            <div class="container" th:each="question : ${pagination.questions}">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">
+                            <img th:src="${question.user.getAvatarUrl()}" class="rounded avatarImg" alt="profile">
+                            [[${question.title}]]
+                        </h5>
+                        <p class="card-text">
+                            [[${question.description}]]
+                            <br>
+                            <mark class="text-muted" th:text="${question.tag}?${question.tag}:'默认标签'"></mark>
+                            <small class="text-muted"> • [[${question.user.getName()}]] 发起了问题 • [[${question.commentCount}]]个回复 • [[${question.viewCount}]]个浏览 • [[${#dates.format(question.gmtCreate,'yyyy-MM-dd hh:mm')}]]</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <ul class="pagination justify-content-end" style="text-align: right">
+                <li class="page-item" th:if="${pagination.isShowFirst()}"><a class="page-link" th:href="@{'/profile/'+${section}(page=1)}" href="#">&ltdot;</a></li>
+                <li class="page-item" th:if="${pagination.isShowPrevious()}"><a class="page-link" th:href="@{'/profile/'+${section}(page=${pagination.page}-1)}" href="#">&lt;</a></li>
+                <li th:each="page : ${pagination.pages}" th:class="${pagination.page==page}?'page-item active':'page-item'" class="page-item"><a class="page-link" th:href="@{'/profile/'+${section}(page=${page})}">[[${page}]]</a></li>
+                <li class="page-item" th:if="${pagination.isShowNext()}"><a class="page-link" th:href="@{'/profile/'+${section}(page=${pagination.page}+1)}" href="#">&gt;</a></li>
+                <li class="page-item" th:if="${pagination.isShowLast()}"><a class="page-link" th:href="@{'/profile/'+${section}(page=${pagination.totalPages})}" href="#">&gtdot;</a></li>
+            </ul>
+        </div>
+        <div class="col-md-3 d-none d-md-block">
+            <div class="list-group">
+                <a th:href="@{/profile/questions}" th:class="${section=='questions'}?'list-group-item list-group-item-action text-dark list-group-item-light font-weight-bold':'list-group-item list-group-item-action text-dark container-bg'">我的提问</a>
+                <a th:href="@{/profile/replies}" th:class="${section=='replies'}?'list-group-item list-group-item-action text-dark list-group-item-light font-weight-bold':'list-group-item list-group-item-action text-dark container-bg'">新的消息</a>
+                <a href="#" class="list-group-item list-group-item-action text-dark container-bg">A simple success list group item</a>
+                <a href="#" class="list-group-item list-group-item-action text-dark container-bg">A simple danger list group item</a>
+                <a href="#" class="list-group-item list-group-item-action text-dark container-bg">A simple warning list group item</a>
+                <a href="#" class="list-group-item list-group-item-action text-dark container-bg">A simple info list group item</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+
+<script src="#" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+<script src="#" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.bundle.js}"></script>
+<script src="#" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.js}"></script>
+
+</html>

@@ -36,20 +36,6 @@ public class IndexController {
                         ,@RequestParam(value = "page",defaultValue = "1") Integer page
                         ,@RequestParam(value = "size",defaultValue = "5") Integer size){
 
-        Cookie[] cookies = request.getCookies();
-        if(cookies != null && cookies.length > 0)
-        {
-            for ( Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")){
-                    String token = cookie.getValue();
-                    User user = userService.getUserByToken(token);
-                    if(user != null)
-                        request.getSession().setAttribute("user",user);
-                    break;
-                }
-            }
-        }
-
         if (page < 1) page = 1;
         if (size < 1) size = 1;
         Integer totalSize = questionService.getSize();
