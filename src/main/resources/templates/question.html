@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>[[${question.title}]]</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.css}" href="#">
+    <link rel="stylesheet" th:href="@{/css/community.css}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+</head>
+<body class="bg">
+
+<!--插入公共片段topbar-->
+<div th:replace="commons/nav::topbar "></div>
+
+<div class="container" style="margin-top: 100px">
+    <div class="row">
+        <div class="col-md-9 col-sm-12 container-bg" style="padding-top: 10px; padding-bottom: 10px">
+            <h3 class="text-white pl-1">
+                <i class='far fa-comment-dots' style='font-size:24px'></i>
+                <strong>  [[${question.title}]]</strong>
+            </h3>
+            <small class="text-white-50">
+                <mark class="text-dark" th:text="${question.tag}?${question.tag}:'默认标签'"></mark>
+                | 作者[[${question.user.getName()}]] | 阅读数：[[${question.viewCount}]] | 发布于[[${#dates.format(question.gmtCreate,'yyyy-MM-dd hh:mm')}]]</small>
+            <div class="row">
+                <div class="col"><hr></div>
+            </div>
+            <p class="text-white">[[${question.description}]]</p>
+            <div class="row">
+                <div class="col"><hr></div>
+            </div>
+            <p class="text-white-50"><i class='fas fa-pencil-alt' style='font-size:13px'></i><small>编辑</small></p>
+
+        </div>
+        <div class="col-md-3 d-none d-md-block container-bg border-left">
+            <div class="media mt-3">
+                 <div class="media-body text-white">
+                    <h6 class="mt-0">  发起人</h6>
+                     <img th:src="@{${question.user.getAvatarUrl()}}" class="rounded ml-3" style="width: 32px; height: 32px;" alt="profile">
+                    <hr>
+                     <h6 class="mt-0">相关话题</h6>
+                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<script src="#" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+<script src="#" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.bundle.js}"></script>
+<script src="#" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.js}"></script>
+<script>
+    $(function() {
+        $('#myModal').modal('show')
+    });
+</script>
+</html>

@@ -63,4 +63,18 @@ public class QuestionService {
     public Integer getSize(){
         return questionMapper.getQuestionsCount();
     }
+
+
+
+    public QuestionDTO getQuestionInfoById(Integer id) {
+
+        Question question = questionMapper.getQuestionById(id);
+        User user = userMapper.selectUserById(question.getCreator());
+
+        QuestionDTO questionDTO = new QuestionDTO();
+        BeanUtils.copyProperties(question,questionDTO);
+        questionDTO.setUser(user);
+
+        return questionDTO;
+    }
 }
