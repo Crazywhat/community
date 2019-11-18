@@ -2,7 +2,6 @@ package com.jockey.community.mapper;
 
 import com.jockey.community.model.Question;
 import org.apache.ibatis.annotations.*;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -33,4 +32,7 @@ public interface QuestionMapper {
 
     @Select("SELECT * FROM question WHERE id=#{id}")
     Question getQuestionById(@Param("id") Integer id);
+
+    @Update("UPDATE question SET title=#{title},description=#{description},tag=#{tag},gmt_modified=#{gmtModified} WHERE id=#{id}")
+    void updateQuestion(Question question);
 }

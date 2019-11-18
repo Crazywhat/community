@@ -25,6 +25,7 @@
                 <div class="col"><hr></div>
             </div>
             <form th:action="@{/publish}" th:method="post" class="text-white-50">
+                <input type="hidden" th:value="${id!=null}?${id}" id="id" name="id">
                 <div class="form-group text-white-50">
                     <label for="title"><strong >问题标题（简单扼要）：</strong></label>
                     <input th:value="${title!=null}?${title}" type="text" class="form-control" id="title" name="title" placeholder="问题标题...">

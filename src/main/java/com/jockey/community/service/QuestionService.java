@@ -77,4 +77,14 @@ public class QuestionService {
 
         return questionDTO;
     }
+
+    public Question addOrUpdateQuestion(Question question) {
+        if(question.getId() == null){
+            addQuestion(question);
+            return question;
+        }else{
+            questionMapper.updateQuestion(question);
+            return question;
+        }
+    }
 }
