@@ -23,4 +23,14 @@ public class UserService {
     public User getUserByToken(String token) {
        return userMapper.selectUserByToken(token);
     }
+
+    public User addOrUpdateUser(User user) {
+        User gitUser = userMapper.selectUserByAccoutId(user.getAccountId());
+        if(gitUser == null){
+            return addUser(user);
+        }else{
+            userMapper.updateUser(user);
+            return user;
+        }
+    }
 }

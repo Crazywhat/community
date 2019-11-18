@@ -31,7 +31,7 @@
             <div class="row">
                 <div class="col"><hr></div>
             </div>
-            <p class="text-white-50"><i class='fas fa-pencil-alt' style='font-size:13px'></i><small>编辑</small></p>
+            <p class="text-white-50" th:if="${session.user!=null&&session.user.getId()==question.creator}"><i class='fas fa-pencil-alt' style='font-size:13px'></i><small>编辑</small></p>
 
         </div>
         <div class="col-md-3 d-none d-md-block container-bg border-left">

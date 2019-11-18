@@ -15,4 +15,11 @@ public interface UserMapper {
 
     @Select("SELECT * FROM user WHERE id=#{id}")
     User selectUserById(@Param("id") int id);
+
+    @Select("SELECT * FROM user WHERE account_id=#{accountId}")
+    User selectUserByAccoutId(@Param("accountId") String accountId);
+
+
+    @Update({"UPDATE user SET name=#{name},token=#{token},gmt_modified=#{gmtModified},bio=#{bio},avatar_url=#{avatarUrl} WHERE account_id=#{accountId}"})
+    void updateUser(User user);
 }
