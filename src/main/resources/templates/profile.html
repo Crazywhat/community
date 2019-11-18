@@ -31,7 +31,8 @@
                     <div class="card-body">
                         <h5 class="card-title text-primary">
                             <img th:src="${question.user.getAvatarUrl()}" class="rounded avatarImg" alt="profile">
-                            [[${question.title}]]
+                            <a th:href="@{'/question/'+${question.id}}" >[[${question.title}]]</a>
+
                         </h5>
                         <p class="card-text">
                             [[${question.description}]]

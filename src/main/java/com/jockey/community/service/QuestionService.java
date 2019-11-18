@@ -4,7 +4,9 @@ import com.jockey.community.dto.QuestionDTO;
 import com.jockey.community.mapper.QuestionMapper;
 import com.jockey.community.mapper.UserMapper;
 import com.jockey.community.model.Question;
+import com.jockey.community.model.QuestionExample;
 import com.jockey.community.model.User;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,17 +25,20 @@ public class QuestionService {
 
 
     public Question addQuestion(Question question){
-        questionMapper.insertQuestion(question);
+        questionMapper.insertSelective(question);
         return question;
     }
 
 
     public List<QuestionDTO> listByCreator(Integer creator,Integer page, Integer size){
-        List<Question> questions = questionMapper.selectCreatorRangeQuestion(creator,(page-1)*size,size);
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria().andCreatorEqualTo(creator);
+        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds((page - 1) * size, size));
+
         List<QuestionDTO> questionDTOS = new ArrayList<>();
 
         for (Question question: questions) {
-            User user = userMapper.selectUserById(question.getCreator());
+            User user = userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question,questionDTO);
             questionDTO.setUser(user);
@@ -45,11 +50,12 @@ public class QuestionService {
 
 
     public List<QuestionDTO> list(Integer page, Integer size) {
-        List<Question> questions = questionMapper.selectRangeQuestion((page-1)*size,size);
+
+        List<Question> questions = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds((page - 1) * size, size));
         List<QuestionDTO> questionDTOS = new ArrayList<>();
 
         for (Question question: questions) {
-            User user = userMapper.selectUserById(question.getCreator());
+            User user = userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question,questionDTO);
             questionDTO.setUser(user);
@@ -59,17 +65,22 @@ public class QuestionService {
         return questionDTOS;
     }
 
-    public Integer getSizeByCreator(Integer creator){ return  questionMapper.getQuestionsCountByCreator(creator);}
+    public Integer getSizeByCreator(Integer creator){
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria().andCreatorEqualTo(creator);
+        return  (int) questionMapper.countByExample(questionExample);
+    }
     public Integer getSize(){
-        return questionMapper.getQuestionsCount();
+        QuestionExample questionExample = new QuestionExample();
+        return (int)questionMapper.countByExample(questionExample);
     }
 
 
 
     public QuestionDTO getQuestionInfoById(Integer id) {
 
-        Question question = questionMapper.getQuestionById(id);
-        User user = userMapper.selectUserById(question.getCreator());
+        Question question = questionMapper.selectByPrimaryKey(id);
+        User user = userMapper.selectByPrimaryKey(question.getCreator());
 
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question,questionDTO);
@@ -83,7 +94,16 @@ public class QuestionService {
             addQuestion(question);
             return question;
         }else{
-            questionMapper.updateQuestion(question);
+            Question updateQuestion = new Question();
+            updateQuestion.setTitle(question.getTitle());
+            updateQuestion.setDescription(question.getDescription());
+            updateQuestion.setTag(question.getTag());
+            updateQuestion.setGmtModified(System.currentTimeMillis());
+
+
+            QuestionExample questionExample = new QuestionExample();
+            questionExample.createCriteria().andIdEqualTo(question.getId());
+            questionMapper.updateByExampleSelective(updateQuestion, questionExample);
             return question;
         }
     }

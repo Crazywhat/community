@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+
+        <!-- the legacy DB2 CLI driver will be used to connect to the database, and also specifies where the driver can be found.-->
+        <!--已在pom.xml中配置-->
+        <!--<classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip" />-->
+
+        <!--配置generator使用到的插件-->
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin>
+
+        <!--连接数据库的信息-->
+        <jdbcConnection driverClass="org.h2.Driver"
+                        connectionURL="jdbc:h2:~/community"
+                        userId="sa"
+                        password="123">
+        </jdbcConnection>
+
+        <!--The Java Type Resolver should not force the use of BigDecimal fields - this means that integral types (Short, Integer, Long, etc.) will be substituted if possible. This feature is an attempt to make database DECIMAL and NUMERIC columns easier to deal with.-->
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <!--产生model-->
+        <javaModelGenerator targetPackage="com.jockey.community.model" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <!--产生xxxMapper.xml-->
+        <sqlMapGenerator targetPackage="mapper"  targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+        <!--产生xxxMapper.xml-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.jockey.community.mapper"  targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+        <!--根据表产生以上文件，domainObjectName创建的bean类名-->
+        <table  tableName="user" domainObjectName="User" >
+        </table>
+        <table  tableName="question" domainObjectName="Question" >
+        </table>
+    </context>
+</generatorConfiguration>

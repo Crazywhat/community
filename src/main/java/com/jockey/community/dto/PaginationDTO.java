@@ -17,13 +17,13 @@ public class PaginationDTO {
     private Integer totalPages;
     private List<Integer> pages = new ArrayList<>();
 
-    public PaginationDTO(List<QuestionDTO> questionDTOS, Integer page, Integer totalPages){
+    public PaginationDTO(List<QuestionDTO> questionDTOS, Integer page, Integer totalPages, Integer totalSize){
 
         this.questions = questionDTOS;
         this.page = page;
         this.totalPages = totalPages;
 
-        this.showPrevious = (page != 1);
+        this.showPrevious = (page != 1 && totalSize != 0);
         this.showNext = (page != totalPages);
 
         this.showFirst = (page > 4);
