@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>论坛社区</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.css}" href="#">
+    <link rel="stylesheet" th:href="@{/css/community.css}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
+</head>
+<body class="bg">
+
+<!--插入公共片段topbar-->
+<div th:replace="commons/nav::topbar "></div>
+
+
+<div class="container" style="margin-top: 100px">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 container-bg" style="padding-top: 10px; padding-bottom: 10px">
+            <div class="jumbotron">
+                <h1 class="display-4">呀，出错啦!</h1>
+                <p class="lead" th:text="${errorMsg!=null}?${errorMsg}:'失败是成功之母，先见见亲家...'"></p>
+                <hr class="my-4">
+                <p>[[${errorCode}]] : [[${errorReason}]]</p>
+                <a class="btn btn-primary btn-lg" th:href="@{/}" role="button">怒回主页</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+
+<script src="#" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+<script src="#" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.bundle.js}"></script>
+<script src="#" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.js}"></script>
+
+</html>

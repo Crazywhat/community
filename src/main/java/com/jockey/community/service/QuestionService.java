@@ -1,6 +1,9 @@
 package com.jockey.community.service;
 
 import com.jockey.community.dto.QuestionDTO;
+import com.jockey.community.exception.CustomizeErrorCode;
+import com.jockey.community.exception.CustomizeException;
+import com.jockey.community.exception.ICustomizeErrorCode;
 import com.jockey.community.mapper.QuestionMapper;
 import com.jockey.community.mapper.UserMapper;
 import com.jockey.community.model.Question;
@@ -80,6 +83,10 @@ public class QuestionService {
     public QuestionDTO getQuestionInfoById(Integer id) {
 
         Question question = questionMapper.selectByPrimaryKey(id);
+        if(question == null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTON_NO_EXIST);
+        }
+
         User user = userMapper.selectByPrimaryKey(question.getCreator());
 
         QuestionDTO questionDTO = new QuestionDTO();
@@ -103,7 +110,9 @@ public class QuestionService {
 
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria().andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updateQuestion, questionExample);
+            if (questionMapper.updateByExampleSelective(updateQuestion, questionExample) != 1)
+                throw new  CustomizeException(CustomizeErrorCode.QUESTON_NO_EXIST);
+
             return question;
         }
     }
