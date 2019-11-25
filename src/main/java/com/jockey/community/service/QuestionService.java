@@ -3,7 +3,7 @@ package com.jockey.community.service;
 import com.jockey.community.dto.QuestionDTO;
 import com.jockey.community.exception.CustomizeErrorCode;
 import com.jockey.community.exception.CustomizeException;
-import com.jockey.community.exception.ICustomizeErrorCode;
+import com.jockey.community.mapper.QuestionExtendMapper;
 import com.jockey.community.mapper.QuestionMapper;
 import com.jockey.community.mapper.UserMapper;
 import com.jockey.community.model.Question;
@@ -26,6 +26,9 @@ public class QuestionService {
     @Autowired
     QuestionMapper questionMapper;
 
+    @Autowired
+    QuestionExtendMapper questionExtendMapper;
+
 
     public Question addQuestion(Question question){
         questionMapper.insertSelective(question);
@@ -33,7 +36,7 @@ public class QuestionService {
     }
 
 
-    public List<QuestionDTO> listByCreator(Integer creator,Integer page, Integer size){
+    public List<QuestionDTO> listByCreator(Long creator,Integer page, Integer size){
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria().andCreatorEqualTo(creator);
         List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds((page - 1) * size, size));
@@ -68,7 +71,7 @@ public class QuestionService {
         return questionDTOS;
     }
 
-    public Integer getSizeByCreator(Integer creator){
+    public Integer getSizeByCreator(Long creator){
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria().andCreatorEqualTo(creator);
         return  (int) questionMapper.countByExample(questionExample);
@@ -80,11 +83,11 @@ public class QuestionService {
 
 
 
-    public QuestionDTO getQuestionInfoById(Integer id) {
+    public QuestionDTO getQuestionInfoById(Long id) {
 
         Question question = questionMapper.selectByPrimaryKey(id);
         if(question == null){
-            throw new CustomizeException(CustomizeErrorCode.QUESTON_NO_EXIST);
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NO_EXIST);
         }
 
         User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -110,10 +113,33 @@ public class QuestionService {
 
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria().andIdEqualTo(question.getId());
-            if (questionMapper.updateByExampleSelective(updateQuestion, questionExample) != 1)
-                throw new  CustomizeException(CustomizeErrorCode.QUESTON_NO_EXIST);
+            if (questionMapper.updateByExampleSelective(updateQuestion, questionExample) != 0)
+                throw new  CustomizeException(CustomizeErrorCode.QUESTION_NO_EXIST);
 
             return question;
+        }
+    }
+
+    public void increaseViewCount(Long id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtendMapper.increaseViewCount(question);
+    }
+
+    public List<Question> getTagRelatedQuestion(Long id,String tag) {
+        String[] tags = tag.split(",");
+        String relatedTag = String.join("|",tags);
+
+        Question question = new Question();
+        question.setId(id);
+        question.setTag(relatedTag);
+
+        List<Question> relatedQuestion = questionExtendMapper.selectByRelatedTag(question);
+        if(relatedQuestion.size() == 0){
+            return new ArrayList<>();
+        }else {
+            return relatedQuestion;
         }
     }
 }

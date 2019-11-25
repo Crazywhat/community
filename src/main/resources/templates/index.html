@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
 </head>
-<body class="bg">
+<body class="bg" onload="onLoad()">
 
 <!--插入公共片段topbar-->
 <div th:replace="commons/nav::topbar "></div>
@@ -70,9 +70,15 @@
 
 
 </body>
-
 <script src="#" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
 <script src="#" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.bundle.js}"></script>
 <script src="#" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.js}"></script>
-
+<script>
+    function onLoad() {
+        if(localStorage.getItem("closeable") == "true"){
+            localStorage.removeItem("closeable");
+            window.close();
+        }
+    }
+</script>
 </html>

@@ -1,16 +1,15 @@
 package com.jockey.community.controller;
 
+import com.jockey.community.dto.ResultDTO;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -20,43 +19,41 @@ public class CustomizeErrorController implements ErrorController{
 
     @RequestMapping(produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView errorHtml(HttpServletRequest request, HttpServletResponse response) {
-        HttpStatus status = getStatus(request);
-        Map<String,Object> model = new HashMap<>();
 
-        model.put("errorCode",status.value());
-        model.put("errorReason",status.getReasonPhrase());
+        ResultDTO resultDTO = getErrorResult(request);
 
-        if(status.is4xxClientError()){
-            model.put("errorMsg","小伙子，请求姿势不对！应该先这样，再这样，最后这样，明白了吗？");
-        }
-
-        if(status.is5xxServerError()){
-            model.put("errorMsg","服务器炸了！！！真的，没骗你（认真脸）");
-        }
-
-        return new ModelAndView("error", model);
+        Map<String,Object> resultMap = new LinkedHashMap<>();
+        resultMap.put("code", resultDTO.getCode());
+        resultMap.put("message", resultDTO.getMessage());
+        return new ModelAndView("error", resultMap);
     }
 
     @RequestMapping
-    public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
-        HttpStatus status = getStatus(request);
-        if (status == HttpStatus.NO_CONTENT) {
-            return new ResponseEntity<>(status);
+    public ResultDTO error(HttpServletRequest request) {
+        return getErrorResult(request);
+    }
+
+    private ResultDTO getErrorResult(HttpServletRequest request){
+        ResultDTO resultDTO = null;
+        if(request.getAttribute("result") == null){
+            HttpStatus status = getStatus(request);
+
+            Integer code = status.value();
+            String message = status.getReasonPhrase();
+
+            if(status.is4xxClientError()){
+                message = "小伙子，请求姿势不对！应该先这样，再这样，最后这样，明白了吗？(" + message + ")";
+            }
+
+            if(status.is5xxServerError()){
+                message = "服务器炸了！！！真的，没骗你（认真脸）(" + message + ")";
+            }
+
+            resultDTO = ResultDTO.errorOf(code,message);
+        }else{
+            resultDTO = (ResultDTO) request.getAttribute("result");
         }
-        Map<String, Object> body = new LinkedHashMap<>();
-
-        body.put("errorCode",status.value());
-        body.put("errorReason",status.getReasonPhrase());
-
-        if(status.is4xxClientError()){
-            body.put("errorMsg","小伙子，你这...请求姿势不对呀！你应该先这样，然后这样，最后再这样，明白了吗？");
-        }
-
-        if(status.is5xxServerError()){
-            body.put("errorMsg","服务器炸了！！！真的，没骗你（认真脸）");
-        }
-
-        return new ResponseEntity<>(body, status);
+        return resultDTO;
     }
 
     private HttpStatus getStatus(HttpServletRequest request) {

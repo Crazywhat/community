@@ -25,7 +25,7 @@ public class PublishController {
 
 
     @GetMapping("/publish/{id}")
-    public String edit(@PathVariable(value = "id",required = false)Integer id,
+    public String edit(@PathVariable(value = "id",required = false)Long id,
                         Model model){
 
         QuestionDTO questionDTO = questionService.getQuestionInfoById(id);

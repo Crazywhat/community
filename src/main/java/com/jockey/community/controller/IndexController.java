@@ -43,6 +43,7 @@ public class IndexController {
         if(page > totalPages) page = totalPages;
 
         List<QuestionDTO> questionDTOs = questionService.list(page,size);
+        
         PaginationDTO paginationDTO = new PaginationDTO(questionDTOs, page, totalPages, totalSize);
         model.addAttribute("pagination", paginationDTO);
 

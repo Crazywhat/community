@@ -21,9 +21,9 @@
         <div class="col-md-12 col-sm-12 container-bg" style="padding-top: 10px; padding-bottom: 10px">
             <div class="jumbotron">
                 <h1 class="display-4">呀，出错啦!</h1>
-                <p class="lead" th:text="${errorMsg!=null}?${errorMsg}:'失败是成功之母，先见见亲家...'"></p>
+                <p class="lead" th:text="${code!=null}?${code}:'失败是成功之母，先见见亲家...'"></p>
                 <hr class="my-4">
-                <p>[[${errorCode}]] : [[${errorReason}]]</p>
+                <p>[[${message}]]</p>
                 <a class="btn btn-primary btn-lg" th:href="@{/}" role="button">怒回主页</a>
             </div>
         </div>
