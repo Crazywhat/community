@@ -38,7 +38,12 @@
                             [[${question.description}]]
                             <br>
                             <mark class="text-muted" th:text="${question.tag}?${question.tag}:'默认标签'"></mark>
-                            <small class="text-muted"> • [[${question.user.getName()}]] 发起了问题 • [[${question.commentCount}]]个回复 • [[${question.viewCount}]]个浏览 • [[${#dates.format(question.gmtCreate,'yyyy-MM-dd hh:mm')}]]</small>
+                            <small class="text-muted"> • [[${question.user.getName()}]] 发起了问题 • [[${question.commentCount}]]个回复 • [[${question.viewCount}]]个浏览 • [[${#dates.format(question.gmtCreate,'yyyy-MM-dd hh:mm')}]] • </small>
+                            <a th:href="@{'/publish/'+ ${question.id}}" class="text-muted"
+                               th:if="${session.user!=null&&session.user.getId()==question.creator}"><i class='fas fa-pencil-alt'
+                                                                                                        style='font-size:13px'></i>
+                                <small>编辑</small>
+                            </a>
                         </p>
                     </div>
                 </div>

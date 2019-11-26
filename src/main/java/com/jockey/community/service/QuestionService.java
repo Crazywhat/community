@@ -57,7 +57,10 @@ public class QuestionService {
 
     public List<QuestionDTO> list(Integer page, Integer size) {
 
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds((page - 1) * size, size));
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.setOrderByClause("gmt_create desc");
+
+        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds((page - 1) * size, size));
         List<QuestionDTO> questionDTOS = new ArrayList<>();
 
         for (Question question: questions) {

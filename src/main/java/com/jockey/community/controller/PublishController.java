@@ -1,10 +1,13 @@
 package com.jockey.community.controller;
 
+import com.jockey.community.TagCache;
 import com.jockey.community.dto.QuestionDTO;
+import com.jockey.community.dto.TagDTO;
 import com.jockey.community.model.Question;
 import com.jockey.community.model.User;
 import com.jockey.community.service.QuestionService;
 import com.jockey.community.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,12 +38,15 @@ public class PublishController {
         model.addAttribute("tag",questionDTO.getTag());
         model.addAttribute("id",questionDTO.getId());
 
+        model.addAttribute("allTags", TagCache.get());
+
         return "publish";
     }
 
 
     @GetMapping("/publish")
-    public String publish(){
+    public String publish(Model model){
+        model.addAttribute("allTags", TagCache.get());
         return "publish";
     }
 
@@ -54,6 +60,8 @@ public class PublishController {
         model.addAttribute("description",question.getDescription());
         model.addAttribute("tag",question.getTag());
 
+        model.addAttribute("allTags", TagCache.get());
+
         //获取用户登录信息
         User user = (User) request.getSession().getAttribute("user");
         if (user==null){
@@ -62,21 +70,26 @@ public class PublishController {
         }
 
         //判断输入是否合法
-        if(question.getTitle() == null || question.getTitle().equals(""))
+        if(StringUtils.isAnyEmpty(question.getTitle()))
         {
             model.addAttribute("msg","[ 问题标题 ]不能为空");
             return "publish";
         }
-        if(question.getDescription() == null || question.getDescription().equals(""))
+        if(StringUtils.isAnyEmpty(question.getDescription()))
         {
             model.addAttribute("msg","[ 问题补充 ]不能为空");
             return "publish";
         }
-        if(question.getTag() == null || question.getTag().equals(""))
+        if(StringUtils.isAnyEmpty(question.getTag()))
         {
             model.addAttribute("msg","[ 标签 ]不能为空");
             return "publish";
         }
+        if(!StringUtils.isAnyEmpty(TagCache.filterInvalidTags(question.getTag()))){
+            model.addAttribute("msg","含非法标签");
+            return "publish";
+        }
+
 
         question.setCreator(user.getId());
         question.setGmtCreate(System.currentTimeMillis());

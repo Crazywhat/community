@@ -20,27 +20,24 @@
         <div class="col-md-9 col-sm-12 container-bg" style="padding-top: 10px; padding-bottom: 10px">
 
             <!--问题展示区-->
-            <div class="col-md-12 col-sm-12 col-lg-12">
+            <div class="col-md-12 col-sm-12 col-lg-12 mt-2">
                 <h3 class="text-white pl-1">
                     <i class='far fa-comment-dots' style='font-size:24px'></i>
                     <strong> [[${question.title}]]</strong>
                 </h3>
                 <small class="text-white-50">
-                    <mark class="text-dark" th:text="${question.tag}?${question.tag}:'默认标签'"></mark>
-                    | 作者[[${question.user.getName()}]] | 阅读数：[[${question.viewCount}]] |
-                    发布于[[${#dates.format(question.gmtCreate,'yyyy-MM-dd hh:mm')}]]
+                    作者：[[${question.user.getName()}]] | 阅读数：[[${question.viewCount}]] |
+                    发布时间：[[${#dates.format(question.gmtCreate,'yyyy-MM-dd hh:mm')}]]
                 </small>
-                <div class="row">
-                    <div class="col">
-                        <hr>
-                    </div>
-                </div>
+
+                <hr class="col-md-12 col-sm-12 col-lg-12">
+
                 <p class="text-white">[[${question.description}]]</p>
-                <div class="row" th:if="${session.user!=null&&session.user.getId()==question.creator}">
-                    <div class="col">
-                        <hr>
-                    </div>
-                </div>
+
+                <hr class="col-md-12 col-sm-12 col-lg-12 mb-1">
+                <a th:each="tag:${question.getTag().split(',')}" class="badge badge-warning mr-1 mt-0 mb-0 tag-hover"><i class="fa fa-tag" aria-hidden="true"></i> [[${tag}]]</a>
+
+                <hr  class="col-md-12 col-sm-12 col-lg-12 mt-1" th:if="${session.user!=null&&session.user.getId()==question.creator}">
                 <a th:href="@{'/publish/'+ ${question.id}}" class="text-white-50"
                    th:if="${session.user!=null&&session.user.getId()==question.creator}"><i class='fas fa-pencil-alt'
                                                                                             style='font-size:13px'></i>
@@ -102,7 +99,7 @@
                 </div>
             </div>
 
-            <hr class="col-md-12 col-sm-12 col-lg-12">
+            <hr class="col-md-12 col-sm-12 col-lg-12" th:if="${!comments.isEmpty()}">
 
             <!--创建评论区-->
             <div id="question-comment-section" class="col-md-12 col-sm-12 col-lg-12">

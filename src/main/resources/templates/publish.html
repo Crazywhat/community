@@ -14,7 +14,7 @@
 <!--插入公共片段topbar-->
 <div th:replace="commons/nav::topbar "></div>
 
-<div class="container" style="margin-top: 100px">
+<div class="container" style="margin-top: 70px">
     <div class="row">
         <div class="col-md-9 col-sm-12 container-bg" style="padding-top: 10px; padding-bottom: 10px">
             <h3 class="text-white">
@@ -28,19 +28,36 @@
                 <input type="hidden" th:value="${id!=null}?${id}" id="id" name="id">
                 <div class="form-group text-white-50">
                     <label for="title"><strong >问题标题（简单扼要）：</strong></label>
-                    <input th:value="${title!=null}?${title}" type="text" class="form-control" id="title" name="title" placeholder="问题标题...">
+                    <input th:value="${title!=null}?${title}" type="text" class="form-control" autocomplete="off" id="title" name="title" placeholder="问题标题...">
                 </div>
                 <div class="form-group">
                     <label for="description"><strong>问题补充（必填）：</strong></label>
-                    <textarea th:text="${description!=null}?${description}" class="form-control" id="description" rows="8" name="description" placeholder=""></textarea>
+                    <textarea th:text="${description!=null}?${description}" class="form-control" autocomplete="off" id="description" rows="8" name="description" placeholder=""></textarea>
                 </div>
                 <div class="form-group text-white-50">
                     <label for="tag"><strong >添加标签：</strong></label>
-                    <input th:value="${tag!=null}?${tag}" type="text" class="form-control" id="tag" name="tag" placeholder="输入标签，以逗号分隔">
+                    <input th:value="${tag!=null}?${tag}" type="text" class="form-control" autocomplete="off" id="tag" name="tag" placeholder="输入标签，以逗号分隔">
+
+                    <div id="tags-choose-area" class="col-md-12 col-sm-12 col-lg-12 mt-2 d-none">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item" th:each="catalogTag,tagStat:${allTags}">
+                                <a th:class="${tagStat.first}?'nav-link text-dark active':'nav-link text-dark'" data-toggle="tab" th:href="${'#'+catalogTag.tagCatalog}">[[${catalogTag.tagCatalog}]]</a>
+                            </li>
+                        </ul>
+
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div th:id="${catalogTag.tagCatalog}" th:class="${tagState.first}?'container tab-pane active':'container tab-pane'" th:each="catalogTag,tagState:${allTags}">
+                                <a class="tag-hover badge badge-warning mr-1 mt-0 mb-0 text-dark" onclick="add_tag_value(this)" th:each="tag:${catalogTag.tags}" th:data-tag-value="${tag}"><i class="fa fa-tag" aria-hidden="true"></i>[[${tag}]]</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-success float-right" style="margin-right: 30px">发布</button>
             </form>
         </div>
+
         <div class="col-md-3 d-none d-md-block">
             <div class="card container-bg" style="padding-top: 10px;">
                 <div class="card-body">
@@ -57,13 +74,8 @@
 </div>
 
 </body>
-
 <script src="#" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
 <script src="#" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.bundle.js}"></script>
 <script src="#" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.js}"></script>
-<script>
-    $(function() {
-        $('#myModal').modal('show')
-    });
-</script>
+<script src="#" th:src="@{/js/publish.js}"></script>
 </html>

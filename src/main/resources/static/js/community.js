@@ -1,5 +1,3 @@
-
-
 //折叠子评论
 function collapse_subcomment(e) {
     var commentId = e.getAttribute("data-cm-id");
