@@ -26,16 +26,14 @@
             <div class="row">
                 <div class="col"><hr></div>
             </div>
-            <div class="container" th:each="question : ${pagination.questions}">
-                <div class="card">
+            <div class="container" th:each="question : ${pagination.data}">
+                <div class="card mb-1">
                     <div class="card-body">
                         <h5 class="card-title text-primary">
                             <img th:src="${question.user.getAvatarUrl()}" class="rounded avatarImg" alt="profile">
                             <a th:href="@{'/question/'+${question.id}}" >[[${question.title}]]</a>
                         </h5>
                         <p class="card-text">
-                            [[${question.description}]]
-                            <br>
                             <mark class="text-muted" th:text="${question.tag}?${question.tag}:'默认标签'"></mark>
                             <small class="text-muted"> • [[${question.user.getName()}]] 发起了问题 • [[${question.commentCount}]]个回复 • [[${question.viewCount}]]个浏览 • [[${#dates.format(question.gmtCreate,'yyyy-MM-dd hh:mm')}]]</small>
                         </p>
@@ -44,11 +42,11 @@
             </div>
 
             <ul class="pagination justify-content-end" style="text-align: right">
-                <li class="page-item" th:if="${pagination.isShowFirst()}"><a class="page-link" th:href="@{/(page=1)}" href="#">&ltdot;</a></li>
-                <li class="page-item" th:if="${pagination.isShowPrevious()}"><a class="page-link" th:href="@{/(page=${pagination.page}-1)}" href="#">&lt;</a></li>
-                <li th:each="page : ${pagination.pages}" th:class="${pagination.page==page}?'page-item active':'page-item'" class="page-item"><a class="page-link" th:href="@{/(page=${page})}">[[${page}]]</a></li>
-                <li class="page-item" th:if="${pagination.isShowNext()}"><a class="page-link" th:href="@{/(page=${pagination.page}+1)}" href="#">&gt;</a></li>
-                <li class="page-item" th:if="${pagination.isShowLast()}"><a class="page-link" th:href="@{/(page=${pagination.totalPages})}" href="#">&gtdot;</a></li>
+                <li class="page-item" th:if="${pagination.isShowFirst()}"><a class="page-link" th:href="@{/(search=${search},page=1)}" href="#">&ltdot;</a></li>
+                <li class="page-item" th:if="${pagination.isShowPrevious()}"><a class="page-link" th:href="@{/(search=${search},page=${pagination.page}-1)}" href="#">&lt;</a></li>
+                <li th:each="page : ${pagination.pages}" th:class="${pagination.page==page}?'page-item active':'page-item'" class="page-item"><a class="page-link" th:href="@{/(search=${search},page=${page})}">[[${page}]]</a></li>
+                <li class="page-item" th:if="${pagination.isShowNext()}"><a class="page-link" th:href="@{/(search=${search},page=${pagination.page}+1)}" href="#">&gt;</a></li>
+                <li class="page-item" th:if="${pagination.isShowLast()}"><a class="page-link" th:href="@{/(search=${search},page=${pagination.totalPages})}" href="#">&gtdot;</a></li>
             </ul>
 
         </div>
@@ -65,6 +63,10 @@
             </div>
         </div>
     </div>
+
+    <!--插入公共片段footer-->
+    <div th:replace="commons/footer::footer "></div>
+
 </div>
 
 

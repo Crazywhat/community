@@ -7,7 +7,9 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     NO_LOGIN(2003,"未登录"),
     COMMENT_NO_TYPE(2004,"评论的类型不能为空"),
     COMMENT_WRONG_TYPE(2005,"错误评论类型"),
-    COMMENT_NO_PARENT_ID(2006,"评论的问题或评论 不存在");
+    COMMENT_NO_PARENT_ID(2006,"评论的问题或评论 不存在"),
+    NOTIFICATION_NO_EXIST(2007,"通知不存在"),
+    FILE_UPLOAD_FAIL(2008,"文件上传失败");
 
 
 

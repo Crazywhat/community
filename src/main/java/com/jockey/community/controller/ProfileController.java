@@ -3,7 +3,9 @@ package com.jockey.community.controller;
 
 import com.jockey.community.dto.PaginationDTO;
 import com.jockey.community.dto.QuestionDTO;
+import com.jockey.community.model.Notification;
 import com.jockey.community.model.User;
+import com.jockey.community.service.NotificationService;
 import com.jockey.community.service.QuestionService;
 import com.jockey.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class ProfileController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    NotificationService notificationService;
 
 
     @GetMapping("profile")
@@ -59,16 +64,27 @@ public class ProfileController {
 
             List<QuestionDTO> questionDTOs = questionService.listByCreator(user.getId(), page, size);
 
-            PaginationDTO paginationDTO = new PaginationDTO(questionDTOs, page, totalPages, totalSize);
+            PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>(questionDTOs, page, totalPages, totalSize);
             model.addAttribute("pagination", paginationDTO);
 
-
+            return "profile";
         }else if(section.equals("replies")){
             model.addAttribute("section","replies");
             model.addAttribute("sectionName","最新回复");
+
+            Integer totalSize = notificationService.getSizeByReceiver(user.getId());
+            Integer totalPages = (totalSize + size - 1) / size;
+            if(page > totalPages) page = totalPages;
+
+            List<Notification> notifications = notificationService.listByReceiver(user.getId(), page, size);
+
+            PaginationDTO<Notification> paginationDTO = new PaginationDTO<>(notifications, page, totalPages, totalSize);
+            model.addAttribute("pagination", paginationDTO);
+
+            return "replies";
         }
 
-        return "profile";
+        return "/";
     }
 
 }

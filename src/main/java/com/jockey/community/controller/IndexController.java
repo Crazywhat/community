@@ -4,6 +4,7 @@ package com.jockey.community.controller;
 import com.jockey.community.dto.PaginationDTO;
 import com.jockey.community.dto.QuestionDTO;
 import com.jockey.community.model.User;
+import com.jockey.community.service.NotificationService;
 import com.jockey.community.service.QuestionService;
 import com.jockey.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,23 +30,27 @@ public class IndexController {
     @Autowired
     QuestionService questionService;
 
+    @Autowired
+    NotificationService notificationService;
 
     @GetMapping("/")
     public String index(HttpServletRequest request
                         , Model model
                         ,@RequestParam(value = "page",defaultValue = "1") Integer page
-                        ,@RequestParam(value = "size",defaultValue = "5") Integer size){
+                        ,@RequestParam(value = "size",defaultValue = "5") Integer size
+                        ,@RequestParam(required = false)String search){
 
         if (page < 1) page = 1;
         if (size < 1) size = 1;
-        Integer totalSize = questionService.getSize();
+        Integer totalSize = questionService.getSize(search);
         Integer totalPages = (totalSize + size - 1)/size;
         if(page > totalPages) page = totalPages;
 
-        List<QuestionDTO> questionDTOs = questionService.list(page,size);
+        List<QuestionDTO> questionDTOs = questionService.list(search,page,size);
         
         PaginationDTO paginationDTO = new PaginationDTO(questionDTOs, page, totalPages, totalSize);
         model.addAttribute("pagination", paginationDTO);
+        model.addAttribute("search", search);
 
         return "index";
     }

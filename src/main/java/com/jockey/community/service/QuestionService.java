@@ -1,6 +1,7 @@
 package com.jockey.community.service;
 
 import com.jockey.community.dto.QuestionDTO;
+import com.jockey.community.dto.QuestionSearchDTO;
 import com.jockey.community.exception.CustomizeErrorCode;
 import com.jockey.community.exception.CustomizeException;
 import com.jockey.community.mapper.QuestionExtendMapper;
@@ -9,6 +10,7 @@ import com.jockey.community.mapper.UserMapper;
 import com.jockey.community.model.Question;
 import com.jockey.community.model.QuestionExample;
 import com.jockey.community.model.User;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,12 +57,21 @@ public class QuestionService {
     }
 
 
-    public List<QuestionDTO> list(Integer page, Integer size) {
+    public List<QuestionDTO> list(String search, Integer page, Integer size) {
 
-        QuestionExample questionExample = new QuestionExample();
-        questionExample.setOrderByClause("gmt_create desc");
+        String searchString = null;
 
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds((page - 1) * size, size));
+        if(!StringUtils.isBlank(search)){
+            String[] keys = search.split(" ");
+            searchString = String.join("|",keys);
+        }
+
+        QuestionSearchDTO questionSearchDTO = new QuestionSearchDTO();
+        questionSearchDTO.setSearch(searchString);
+        questionSearchDTO.setOffset((page - 1) * size);
+        questionSearchDTO.setSize(size);
+
+        List<Question> questions = questionExtendMapper.selectBySearch(questionSearchDTO);
         List<QuestionDTO> questionDTOS = new ArrayList<>();
 
         for (Question question: questions) {
@@ -79,9 +90,13 @@ public class QuestionService {
         questionExample.createCriteria().andCreatorEqualTo(creator);
         return  (int) questionMapper.countByExample(questionExample);
     }
-    public Integer getSize(){
-        QuestionExample questionExample = new QuestionExample();
-        return (int)questionMapper.countByExample(questionExample);
+    public Integer getSize(String search){
+        String searchString = null;
+        if(!StringUtils.isBlank(search)){
+            String[] keys = search.split(" ");
+            searchString = String.join("|",keys);
+        }
+        return questionExtendMapper.countBySearch(searchString);
     }
 
 
@@ -116,7 +131,8 @@ public class QuestionService {
 
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria().andIdEqualTo(question.getId());
-            if (questionMapper.updateByExampleSelective(updateQuestion, questionExample) != 0)
+
+            if (questionMapper.updateByExampleSelective(updateQuestion, questionExample) != 1)
                 throw new  CustomizeException(CustomizeErrorCode.QUESTION_NO_EXIST);
 
             return question;

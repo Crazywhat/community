@@ -26,8 +26,8 @@
             <div class="row">
                 <div class="col"><hr></div>
             </div>
-            <div class="container" th:each="question : ${pagination.questions}">
-                <div class="card">
+            <div class="container" th:each="question : ${pagination.data}">
+                <div class="card mb-1">
                     <div class="card-body">
                         <h5 class="card-title text-primary">
                             <img th:src="${question.user.getAvatarUrl()}" class="rounded avatarImg" alt="profile">
@@ -35,13 +35,10 @@
 
                         </h5>
                         <p class="card-text">
-                            [[${question.description}]]
-                            <br>
                             <mark class="text-muted" th:text="${question.tag}?${question.tag}:'默认标签'"></mark>
-                            <small class="text-muted"> • [[${question.user.getName()}]] 发起了问题 • [[${question.commentCount}]]个回复 • [[${question.viewCount}]]个浏览 • [[${#dates.format(question.gmtCreate,'yyyy-MM-dd hh:mm')}]] • </small>
+                            <small class="text-muted"> • [[${question.commentCount}]]个回复 • [[${question.viewCount}]]个浏览 • [[${#dates.format(question.gmtCreate,'yyyy-MM-dd hh:mm')}]] • </small>
                             <a th:href="@{'/publish/'+ ${question.id}}" class="text-muted"
-                               th:if="${session.user!=null&&session.user.getId()==question.creator}"><i class='fas fa-pencil-alt'
-                                                                                                        style='font-size:13px'></i>
+                               th:if="${session.user!=null&&session.user.getId()==question.creator}"><i class='fas fa-pencil-alt' style='font-size:13px'></i>
                                 <small>编辑</small>
                             </a>
                         </p>
@@ -56,17 +53,20 @@
                 <li class="page-item" th:if="${pagination.isShowLast()}"><a class="page-link" th:href="@{'/profile/'+${section}(page=${pagination.totalPages})}" href="#">&gtdot;</a></li>
             </ul>
         </div>
+
+        <!--侧边栏-->
         <div class="col-md-3 d-none d-md-block">
             <div class="list-group">
                 <a th:href="@{/profile/questions}" th:class="${section=='questions'}?'list-group-item list-group-item-action text-dark list-group-item-light font-weight-bold':'list-group-item list-group-item-action text-dark container-bg'">我的提问</a>
-                <a th:href="@{/profile/replies}" th:class="${section=='replies'}?'list-group-item list-group-item-action text-dark list-group-item-light font-weight-bold':'list-group-item list-group-item-action text-dark container-bg'">新的消息</a>
-                <a href="#" class="list-group-item list-group-item-action text-dark container-bg">A simple success list group item</a>
-                <a href="#" class="list-group-item list-group-item-action text-dark container-bg">A simple danger list group item</a>
-                <a href="#" class="list-group-item list-group-item-action text-dark container-bg">A simple warning list group item</a>
-                <a href="#" class="list-group-item list-group-item-action text-dark container-bg">A simple info list group item</a>
+                <a th:href="@{/profile/replies}" th:class="${section=='replies'}?'list-group-item list-group-item-action text-dark list-group-item-light font-weight-bold':'list-group-item list-group-item-action text-dark container-bg'">新的消息 <span th:if="${session.notice != 0}" class="badge badge-secondary">[[${session.notice}]]</span></a>
             </div>
         </div>
+
     </div>
+
+    <!--插入公共片段footer-->
+    <div th:replace="commons/footer::footer "></div>
+
 </div>
 
 

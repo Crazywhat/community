@@ -7,6 +7,7 @@
     <title>[[${question.title}]]</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.css}" href="#">
     <link rel="stylesheet" th:href="@{/css/community.css}">
+    <link rel="stylesheet" th:href="@{/css/editormd.css}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
           integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 </head>
@@ -32,7 +33,9 @@
 
                 <hr class="col-md-12 col-sm-12 col-lg-12">
 
-                <p class="text-white">[[${question.description}]]</p>
+                <div id="markdown-view" class="text-white" style="color:#343a40">
+                    <textarea style="display:none;">[[${question.description}]]</textarea>
+                </div>
 
                 <hr class="col-md-12 col-sm-12 col-lg-12 mb-1">
                 <a th:each="tag:${question.getTag().split(',')}" class="badge badge-warning mr-1 mt-0 mb-0 tag-hover"><i class="fa fa-tag" aria-hidden="true"></i> [[${tag}]]</a>
@@ -90,7 +93,7 @@
                                            placeholder="评论一下...">
                                 </div>
                                 <button type="button" class="btn btn-success float-right"
-                                        th:data-parent-id="${comment.id}" onclick="sub_comment_commit(this)">评论
+                                        th:data-parent-id="${comment.id}" th:data-login="${session.user==null?0:1}" onclick="sub_comment_commit(this)">评论
                                 </button>
                             </div>
                         </div>
@@ -105,7 +108,7 @@
             <div id="question-comment-section" class="col-md-12 col-sm-12 col-lg-12">
                 <div class="media mt-3">
                     <div class="media-body text-white">
-                        <img th:if="${session.user}" th:src="@{${session.user.avatarUrl}}" class="rounded"
+                        <img th:src="@{${session.user!=null?session.user.avatarUrl:'/images/default_user.png'}}" class="rounded"
                              style="width: 32px; height: 32px;" alt="profile">
                     </div>
                 </div>
@@ -115,7 +118,7 @@
                     <textarea id="question-comment-content" class="form-control" rows="6"></textarea>
                 </div>
 
-                <button type="button" class="btn btn-success float-right mt-2" onclick="question_comment_commit()">回复
+                <button type="button" class="btn btn-success float-right mt-2" th:data-login="${session.user==null?0:1}" onclick="question_comment_commit(this)">回复
                 </button>
 
             </div>
@@ -137,6 +140,10 @@
             </div>
         </div>
     </div>
+
+    <!--插入公共片段footer-->
+    <div th:replace="commons/footer::footer "></div>
+
 </div>
 
 </body>
@@ -146,9 +153,8 @@
 <script src="#" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.js}"></script>
 <script src="#" th:src="@{/js/community.js}"></script>
 <script src="#" th:src="@{/js/moment.js}"></script>
-<script>
-    $(function () {
-        $('#myModal').modal('show')
-    });
-</script>
+<script th:src="@{/js/editormd.min.js}"></script>
+<script th:src="@{/lib/marked.min.js}"></script>
+<script th:src="@{/lib/prettify.min.js}"></script>
+<script th:src="@{/js/markdown-view.js}"></script>
 </html>

@@ -1,6 +1,7 @@
 package com.jockey.community.interceptor;
 
 import com.jockey.community.model.User;
+import com.jockey.community.service.NotificationService;
 import com.jockey.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Autowired
     UserService userService;
+    @Autowired
+    NotificationService notificationService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -27,9 +30,14 @@ public class LoginInterceptor implements HandlerInterceptor {
                 if (cookie.getName().equals("token")){
                     String token = cookie.getValue();
                     User user = userService.getUserByToken(token);
-                    if(user != null)
+                    if(user != null){
                         request.getSession().setAttribute("user",user);
-                    break;
+
+                        Long unReadNotificationCount = notificationService
+                                .getUnReadNotificationCount(user.getId());
+                        request.getSession().setAttribute("notice", unReadNotificationCount);
+                        break;
+                    }
                 }
             }
         }

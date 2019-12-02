@@ -10,13 +10,8 @@ function add_tag_value(e){
     }
 }
 
+
 $(function () {
-
-    //若存在警告信息，则显示
-    $(function() {
-        $('#myModal').modal('show')
-    });
-
 
     //标签选择区的关闭
     $(document).bind("click",function(e){

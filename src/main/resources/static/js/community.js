@@ -77,6 +77,7 @@ function post_comment(type, parentId, content) {
         }),
         success: function (respond) {
             console.log(respond);
+            debugger;
             if (respond.code == 200){
 
                  window.location.reload();
@@ -98,7 +99,13 @@ function post_comment(type, parentId, content) {
 
 
 //提交问题评论
-function question_comment_commit() {
+function question_comment_commit(e) {
+    var login = e.getAttribute("data-login");
+    if(login == 0){
+        alert("[ ！请先登录 ]");
+        return;
+    }
+
     var type = $("#question-comment-type").val();
     var parentId = $("#question-comment-parent").val();
     var content = $("#question-comment-content").val();
@@ -108,9 +115,21 @@ function question_comment_commit() {
 
 //提交二级评论
 function sub_comment_commit(e) {
+    var login = e.getAttribute("data-login");
+    if(login == 0){
+        alert("[ ！请先登录 ]");
+        return;
+    }
+
     var type = 2;
     var parentId = e.getAttribute("data-parent-id");
     var content = $("#sub-edit-" + parentId).val();
 
     post_comment(type, parentId, content);
 }
+
+
+//若存在警告信息，则显示
+$(function() {
+    $('#myModal').modal('show');
+});

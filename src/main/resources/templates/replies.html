@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>论坛社区</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.css}" href="#">
+    <link rel="stylesheet" th:href="@{/css/community.css}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
+</head>
+<body class="bg">
+
+<!--插入公共片段topbar-->
+<div th:replace="commons/nav::topbar"></div>
+
+
+<div class="container" style="margin-top: 100px">
+    <div class="row">
+        <div class="col-md-9 col-sm-12 container-bg" style="padding-top: 10px; padding-bottom: 10px">
+            <h3 class="text-white">
+                <i class='far fa-grin-tongue' style='font-size:24px'></i>
+                <strong>[[${sectionName}]]</strong>
+            </h3>
+            <div class="row">
+                <div class="col"><hr></div>
+            </div>
+            <div class="container" th:each="notice : ${pagination.data}">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text text-dark">
+                            <strong>[[${notice.senderName}]]</strong> [[${notice.type}]] <a th:href="@{'/notification/'+ ${notice.id}}" class="text-muted">[[${notice.questionTitle}]]  <span th:if="${notice.status==0}" class="badge badge-pill badge-danger">未读</span></a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <ul class="pagination justify-content-end" style="text-align: right">
+                <li class="page-item" th:if="${pagination.isShowFirst()}"><a class="page-link" th:href="@{'/profile/'+${section}(page=1)}" href="#">&ltdot;</a></li>
+                <li class="page-item" th:if="${pagination.isShowPrevious()}"><a class="page-link" th:href="@{'/profile/'+${section}(page=${pagination.page}-1)}" href="#">&lt;</a></li>
+                <li th:each="page : ${pagination.pages}" th:class="${pagination.page==page}?'page-item active':'page-item'" class="page-item"><a class="page-link" th:href="@{'/profile/'+${section}(page=${page})}">[[${page}]]</a></li>
+                <li class="page-item" th:if="${pagination.isShowNext()}"><a class="page-link" th:href="@{'/profile/'+${section}(page=${pagination.page}+1)}" href="#">&gt;</a></li>
+                <li class="page-item" th:if="${pagination.isShowLast()}"><a class="page-link" th:href="@{'/profile/'+${section}(page=${pagination.totalPages})}" href="#">&gtdot;</a></li>
+            </ul>
+        </div>
+
+        <!--侧边栏-->
+        <div class="col-md-3 d-none d-md-block">
+            <div class="list-group">
+                <a th:href="@{/profile/questions}" th:class="${section=='questions'}?'list-group-item list-group-item-action text-dark list-group-item-light font-weight-bold':'list-group-item list-group-item-action text-dark container-bg'">我的提问</a>
+                <a th:href="@{/profile/replies}" th:class="${section=='replies'}?'list-group-item list-group-item-action text-dark list-group-item-light font-weight-bold':'list-group-item list-group-item-action text-dark container-bg'">新的消息 <span th:if="${session.notice != 0}" class="badge badge-secondary">[[${session.notice}]]</span></a>
+            </div>
+        </div>
+
+    </div>
+
+    <!--插入公共片段footer-->
+    <div th:replace="commons/footer::footer "></div>
+
+</div>
+
+
+
+</body>
+
+<script src="#" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+<script src="#" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.bundle.js}"></script>
+<script src="#" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.js}"></script>
+
+</html>

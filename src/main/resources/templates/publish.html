@@ -7,9 +7,11 @@
     <title>论坛社区</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.css}" href="#">
     <link rel="stylesheet" th:href="@{/css/community.css}">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/editormd.css}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 </head>
-<body class="bg">t
+<body class="bg">
 
 <!--插入公共片段topbar-->
 <div th:replace="commons/nav::topbar "></div>
@@ -22,34 +24,48 @@
                 <strong>发起</strong>
             </h3>
             <div class="row">
-                <div class="col"><hr></div>
+                <div class="col">
+                    <hr>
+                </div>
             </div>
             <form th:action="@{/publish}" th:method="post" class="text-white-50">
                 <input type="hidden" th:value="${id!=null}?${id}" id="id" name="id">
                 <div class="form-group text-white-50">
-                    <label for="title"><strong >问题标题（简单扼要）：</strong></label>
-                    <input th:value="${title!=null}?${title}" type="text" class="form-control" autocomplete="off" id="title" name="title" placeholder="问题标题...">
+                    <label for="title"><strong>问题标题（简单扼要）：</strong></label>
+                    <input th:value="${title!=null}?${title}" type="text" class="form-control" autocomplete="off"
+                           id="title" name="title" placeholder="问题标题...">
                 </div>
                 <div class="form-group">
-                    <label for="description"><strong>问题补充（必填）：</strong></label>
-                    <textarea th:text="${description!=null}?${description}" class="form-control" autocomplete="off" id="description" rows="8" name="description" placeholder=""></textarea>
+                    <div id="description-editor">
+                        <label for="description"><strong>问题补充（必填）：</strong></label>
+                         <textarea th:text="${description!=null}?${description}" class="form-control" autocomplete="off" id="description" rows="8" name="description" placeholder="" style="display:none;">
+
+                         </textarea>
+                    </div>
                 </div>
                 <div class="form-group text-white-50">
-                    <label for="tag"><strong >添加标签：</strong></label>
-                    <input th:value="${tag!=null}?${tag}" type="text" class="form-control" autocomplete="off" id="tag" name="tag" placeholder="输入标签，以逗号分隔">
+                    <label for="tag"><strong>添加标签：</strong></label>
+                    <input th:value="${tag!=null}?${tag}" type="text" class="form-control" autocomplete="off" id="tag"
+                           name="tag" placeholder="输入标签，以逗号分隔">
 
                     <div id="tags-choose-area" class="col-md-12 col-sm-12 col-lg-12 mt-2 d-none">
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item" th:each="catalogTag,tagStat:${allTags}">
-                                <a th:class="${tagStat.first}?'nav-link text-dark active':'nav-link text-dark'" data-toggle="tab" th:href="${'#'+catalogTag.tagCatalog}">[[${catalogTag.tagCatalog}]]</a>
+                                <a th:class="${tagStat.first}?'nav-link text-dark active':'nav-link text-dark'"
+                                   data-toggle="tab"
+                                   th:href="${'#'+catalogTag.tagCatalog}">[[${catalogTag.tagCatalog}]]</a>
                             </li>
                         </ul>
 
                         <!-- Tab panes -->
                         <div class="tab-content">
-                            <div th:id="${catalogTag.tagCatalog}" th:class="${tagState.first}?'container tab-pane active':'container tab-pane'" th:each="catalogTag,tagState:${allTags}">
-                                <a class="tag-hover badge badge-warning mr-1 mt-0 mb-0 text-dark" onclick="add_tag_value(this)" th:each="tag:${catalogTag.tags}" th:data-tag-value="${tag}"><i class="fa fa-tag" aria-hidden="true"></i>[[${tag}]]</a>
+                            <div th:id="${catalogTag.tagCatalog}"
+                                 th:class="${tagState.first}?'container tab-pane active':'container tab-pane'"
+                                 th:each="catalogTag,tagState:${allTags}">
+                                <a class="tag-hover badge badge-warning mr-1 mt-0 mb-0 text-dark"
+                                   onclick="add_tag_value(this)" th:each="tag:${catalogTag.tags}"
+                                   th:data-tag-value="${tag}"><i class="fa fa-tag" aria-hidden="true"></i>[[${tag}]]</a>
                             </div>
                         </div>
                     </div>
@@ -71,11 +87,18 @@
             </div>
         </div>
     </div>
+
+    <!--插入公共片段footer-->
+    <div th:replace="commons/footer::footer "></div>
+
 </div>
 
 </body>
 <script src="#" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
 <script src="#" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.bundle.js}"></script>
 <script src="#" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.js}"></script>
+<script src="#" th:src="@{/js/community.js}"></script>
 <script src="#" th:src="@{/js/publish.js}"></script>
+<script th:src="@{/js/editormd.min.js}"></script>
+<script th:src="@{/js/markdown-edit.js}"></script>
 </html>

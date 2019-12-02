@@ -5,6 +5,7 @@ import com.jockey.community.dto.GithubUser;
 import com.jockey.community.model.User;
 import com.jockey.community.provider.GithubProvider;
 import com.jockey.community.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import java.util.UUID;
 
 
 @Controller
+@Slf4j
 public class AuthorizeController {
 
     @Autowired
@@ -57,7 +59,8 @@ public class AuthorizeController {
 
             response.addCookie(new Cookie("token",token));
             userService.addOrUpdateUser(user);
-        }
+        }else
+            log.error("get github callback error");
 
         return "redirect:/";
     }
@@ -71,6 +74,8 @@ public class AuthorizeController {
         Cookie cookie = new Cookie("token", null);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
+
+        log.trace("user logout");
 
         return "redirect:/";
     }
