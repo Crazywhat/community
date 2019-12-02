@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-@PropertySource("classpath:accessTokenDTO.properties")
 @ConfigurationProperties(prefix = "github.authorize")
 public class AccessTokenDTO {
 

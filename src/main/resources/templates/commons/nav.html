@@ -22,7 +22,8 @@
                 </form>
                 <ul class="navbar-nav ml-auto mr-2">
                     <li class="nav-item" th:if="${session.user==null}">
-                        <a class="nav-link" href="https://github.com/login/oauth/authorize?client_id=af839bc3aece69b5af99&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>
+                        <!--<a class="nav-link" href="https://github.com/login/oauth/authorize?client_id=af839bc3aece69b5af99&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>-->
+                        <a class="nav-link" th:href="@{https://github.com/login/oauth/authorize(client_id='af839bc3aece69b5af99',redirect_uri=${#httpServletRequest.getServletContext().getAttribute('redirectUri')},scope='user',state=1)}">登录</a>
                     </li>
                     <li class="nav-item" th:if="${session.user!=null}">
                         <a class="nav-link" th:href="@{/publish}">发布</a>
